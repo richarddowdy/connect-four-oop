@@ -15,15 +15,18 @@
  *   board = array of rows, each row is array of cells  (board[y][x])
  */
 
+
 class Game {
 
-  constructor(HEIGHT = 6, WIDTH = 7, board, currPlayer) {
-     this.HEIGHT = HEIGHT;
-     this.WIDTH = WIDTH;
-     this.currPlayer = 1;
-     this.makeBoard();
-     this.makeHtmlBoard();
-
+  constructor(p1, p2, HEIGHT = 6, WIDTH = 7, currPlayer) {
+    this.p1 = p1;
+    this.p2 = p2;
+    this.HEIGHT = HEIGHT;
+    this.WIDTH = WIDTH;
+    this.currPlayer = 1;
+    this.makeBoard();
+    this.makeHtmlBoard();
+    
   }
 
   makeBoard() {
@@ -74,9 +77,16 @@ class Game {
   }
 
   placeInTable(y, x){
+   
     const piece = document.createElement('div');
     piece.classList.add('piece');
-    piece.classList.add(`p${this.currPlayer}`);
+    // piece.classList.add(`p${this.currPlayer}`);
+    if(this.currPlayer === 1){
+      piece.style.backgroundColor = this.p1
+    } else {
+      piece.style.backgroundColor = this.p2;
+    }
+    console.log(this.currPlayer.color);
     piece.style.top = -50 * (y + 2);
 
     const spot = document.getElementById(`${y}-${x}`);
@@ -146,11 +156,47 @@ class Game {
       }
     }
   }
+  clearBoard(){
+    // clear the board
+    location.reload();
+  }
 }
 
-let cfGame = new Game();
+let currentGame;
+
+let startButton = document.getElementById("startButton");
+startButton.addEventListener("click", newGame)
+
+function newGame(){
+  if(currentGame === undefined){
+    
+      let p1 = document.getElementById("p1").value;
+      let p2 = document.getElementById("p2").value;
+      console.log(p1)
+      let player1 = new Player(p1)
+      let player2 = new Player(p2)  
+      console.log(player1.color);   
+      currentGame = new Game(player1.color, player2.color);
+
+  } else {
+    currentGame.clearBoard()
+  }
+}
+
+class Player {
+  
+  constructor(color){
+    this.color = color
+  }
+}
 
 
+
+// document.getElementById("startButton").addEventListener("click", () =>{
+//   let p1 = document.getElementById("p1").value;
+//   let p2 = document.getElementById("p2").value;
+//   new Game(p1, p2);
+// })
 
 
 
